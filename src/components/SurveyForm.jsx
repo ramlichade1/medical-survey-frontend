@@ -3,6 +3,8 @@
 
 import { useState, useCallback } from "react";
 import InputField from "./InputField";
+import { submitSurvey } from "../backend-api/api";
+
 
 // ── Static data (outside component to avoid re-creation) ──────────────────
 
@@ -235,26 +237,26 @@ const ProgressBar = ({ current, total }) => {
       {/* Step dots - horizontal scroll on mobile */}
       <div className="mt-4 -mx-4 px-4 overflow-x-auto">
         <ol aria-label="Steps" className="flex items-center justify-start sm:justify-center gap-1 sm:gap-2 min-w-max px-2">
-        {STEPS.map((s) => (
-          <li key={s.id} aria-current={current === s.id ? "step" : undefined}>
-            <div
-              className={`flex h-6 w-6 sm:h-7 sm:w-7 items-center justify-center rounded-full text-[10px] sm:text-xs font-bold transition-all duration-300 ${s.id < current
-                ? "bg-teal-500 text-white shadow-sm shadow-teal-200"
-                : s.id === current
-                  ? "border-2 border-teal-500 bg-white text-teal-600 shadow-sm"
-                  : "border-2 border-slate-200 bg-white text-slate-300"
-                }`}
-            >
-              {s.id < current ? (
-                <svg viewBox="0 0 24 24" fill="none" className="h-3 w-3 sm:h-3.5 sm:w-3.5" stroke="currentColor" strokeWidth={3}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                </svg>
-              ) : (
-                s.id
-              )}
-            </div>
-          </li>
-        ))}
+          {STEPS.map((s) => (
+            <li key={s.id} aria-current={current === s.id ? "step" : undefined}>
+              <div
+                className={`flex h-6 w-6 sm:h-7 sm:w-7 items-center justify-center rounded-full text-[10px] sm:text-xs font-bold transition-all duration-300 ${s.id < current
+                  ? "bg-teal-500 text-white shadow-sm shadow-teal-200"
+                  : s.id === current
+                    ? "border-2 border-teal-500 bg-white text-teal-600 shadow-sm"
+                    : "border-2 border-slate-200 bg-white text-slate-300"
+                  }`}
+              >
+                {s.id < current ? (
+                  <svg viewBox="0 0 24 24" fill="none" className="h-3 w-3 sm:h-3.5 sm:w-3.5" stroke="currentColor" strokeWidth={3}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                  </svg>
+                ) : (
+                  s.id
+                )}
+              </div>
+            </li>
+          ))}
         </ol>
       </div>
     </div>
@@ -275,7 +277,7 @@ const SectionHeader = ({ step }) => (
 );
 
 // ── SuccessScreen (private, local to this file) ─────────────────────────────
-const SuccessScreen = ({ onReset }) => (
+const SuccessScreen = ({ onReset, responseId }) => (
   <div className="flex flex-col items-center px-4 sm:px-6 py-12 sm:py-16 text-center">
     <div
       className="mb-6 flex h-16 w-16 sm:h-20 sm:w-20 items-center justify-center rounded-full shadow-xl"
@@ -297,7 +299,7 @@ const SuccessScreen = ({ onReset }) => (
     <div className="mb-6 rounded-xl border border-teal-100 bg-teal-50 px-4 sm:px-5 py-2 sm:py-3">
       <p className="text-xs text-teal-600 font-medium">Response ID</p>
       <p className="mt-0.5 font-mono text-xs sm:text-sm font-bold text-teal-800">
-        #{Math.random().toString(36).toUpperCase().slice(2, 10)}
+        #{responseId}
       </p>
     </div>
     <button
@@ -317,6 +319,7 @@ const SurveyForm = () => {
   const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [responseId, setResponseId] = useState("");
 
   const setField = useCallback(
     (field) => (value) => setForm((prev) => ({ ...prev, [field]: value })),
@@ -377,11 +380,7 @@ const SurveyForm = () => {
 
   // const handleSubmit = (e) => {
   //   e.preventDefault();
-  //   if (validate(step)) setSubmitted(true);
-  // };
 
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
   //   const errs = VALIDATORS[step](form);
   //   setErrors(errs);
 
@@ -390,11 +389,19 @@ const SurveyForm = () => {
   //     return;
   //   }
 
-  //   setSubmitted(true);
+  //   setSubmitting(true);
+
+  //   // simulate API call / UX delay
+  //   setTimeout(() => {
+  //     setSubmitting(false);
+  //     setSubmitted(true);
+  //   }, 900);
   // };
-  const handleSubmit = (e) => {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // ✅ Step validation (keep your logic)
     const errs = VALIDATORS[step](form);
     setErrors(errs);
 
@@ -405,19 +412,73 @@ const SurveyForm = () => {
 
     setSubmitting(true);
 
-    // simulate API call / UX delay
-    setTimeout(() => {
+    try {
+      // ✅ Build payload from form state
+      const surveyData = {
+        age: form.age,
+        gender: form.gender,
+        education: form.education,
+        occupation: form.occupation,
+
+        workStudyChange: form.workStudyChange,
+        socialLifeImpact: form.socialLifeImpact,
+        wfhBeforeCovid: form.workedFromHomeBefore,
+        dailyRoutineImpact: form.dailyRoutineImpact,
+
+        vaccinated: form.vaccinated,
+        maskPractice: form.preventivePractice,
+        vaccineEffectiveness: form.vaccineEffectiveness,
+        vaccineType: form.vaccineType,
+
+        testedCovid: form.covidTested,
+        testType: form.testType,
+        doseCount: form.doseCount,
+
+        mentalHealthImpact: form.mentalHealthImpact,
+        anxietyStress: form.anxietyLevel,
+        professionalHelp: form.soughtHelp,
+
+        incomeImpact: form.incomeImpact,
+        financialDifficulty: form.financialDifficulty,
+        spendingHabit: form.spendingHabit,
+
+        experienceShare: form.openExperience,
+        infoSource: form.infoSource,
+      };
+
+
+      // ✅ Send to Google Sheet
+      const result = await submitSurvey(surveyData);
+
+      if (result.code === 1) {
+        setResponseId(result.responseId); // ⭐ save ID
+        setSubmitted(true);
+        alert(result.msg);
+      } else {
+        alert(result.msg);
+      }
+
+    } catch (error) {
+      console.error("Submit error:", error);
+      alert("Something went wrong.");
+    } finally {
       setSubmitting(false);
-      setSubmitted(true);
-    }, 900);
+    }
   };
 
 
+  // const handleReset = () => {
+  //   setForm(INITIAL_FORM);
+  //   setErrors({});
+  //   setStep(1);
+  //   setSubmitted(false);
+  // };
   const handleReset = () => {
     setForm(INITIAL_FORM);
     setErrors({});
     setStep(1);
     setSubmitted(false);
+    setResponseId(""); // add this
   };
 
   const err = (f) => errors[f] || "";
@@ -434,7 +495,11 @@ const SurveyForm = () => {
           style={{ boxShadow: "0 8px 40px -8px rgba(13,148,136,0.18)" }}
         >
 
-          <SuccessScreen onReset={handleReset} />
+          <SuccessScreen
+            onReset={handleReset}
+            responseId={responseId}
+          />
+
         </div>
       ) : (
         <form
