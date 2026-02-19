@@ -4,6 +4,10 @@
 import { useState, useCallback } from "react";
 import InputField from "./InputField";
 import { submitSurvey } from "../backend-api/api";
+import { toast } from "react-toastify";
+import MedicalLoader from "./MedicalLoader";
+import { useRef } from "react";
+
 
 
 // ── Static data (outside component to avoid re-creation) ──────────────────
@@ -320,6 +324,7 @@ const SurveyForm = () => {
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [responseId, setResponseId] = useState("");
+  const isSubmittingRef = useRef(false);
 
   const setField = useCallback(
     (field) => (value) => setForm((prev) => ({ ...prev, [field]: value })),
@@ -402,6 +407,8 @@ const SurveyForm = () => {
     e.preventDefault();
 
     // ✅ Step validation (keep your logic)
+    if (isSubmittingRef.current) return;
+    isSubmittingRef.current = true;
     const errs = VALIDATORS[step](form);
     setErrors(errs);
 
@@ -451,18 +458,31 @@ const SurveyForm = () => {
       const result = await submitSurvey(surveyData);
 
       if (result.code === 1) {
-        setResponseId(result.responseId); // ⭐ save ID
+        setResponseId(result.responseId);
         setSubmitted(true);
-        alert(result.msg);
+
+        toast.success(result.msg, {
+          icon: "🩺",
+          toastId: "survey-success",
+        });
+
       } else {
-        alert(result.msg);
+        toast.error("Server unreachable. Please try again.", {
+          icon: "⚕️",
+          toastId: "survey-error",
+        });
+
       }
+
 
     } catch (error) {
       console.error("Submit error:", error);
-      alert("Something went wrong.");
+      toast.error("Server unreachable. Please try again.", {
+        icon: "⚕️",
+      });
     } finally {
       setSubmitting(false);
+      isSubmittingRef.current = false;
     }
   };
 
@@ -488,6 +508,7 @@ const SurveyForm = () => {
       aria-label="Medical student survey form"
       className="mx-auto w-full max-w-2xl px-3 sm:px-4 pb-12 sm:pb-16"
     >
+      {submitting && <MedicalLoader />}
       {submitted ? (
         <div
           className="glass-card overflow-hidden rounded-xl sm:rounded-2xl shadow-xl
