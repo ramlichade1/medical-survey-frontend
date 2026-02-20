@@ -62,65 +62,6 @@ const INITIAL_FORM = {
 };
 
 
-const GENDER_OPTIONS = [
-  { value: "male", label: "Male" },
-  { value: "female", label: "Female" },
-];
-
-const COURSE_OPTIONS = [
-  { value: "mbbs", label: "MBBS" },
-  { value: "bpharm", label: "B.Pharm" },
-  { value: "mpharm", label: "M.Pharm" },
-  { value: "bds", label: "BDS" },
-  { value: "md_ms", label: "MD / MS" },
-  { value: "other", label: "Other" },
-];
-
-const YEAR_OPTIONS = [
-  { value: "1", label: "1st Year" },
-  { value: "2", label: "2nd Year" },
-  { value: "3", label: "3rd Year" },
-  { value: "4", label: "4th Year" },
-  { value: "5", label: "5th Year / Internship" },
-  { value: "pg", label: "Postgraduate" },
-];
-
-const STATE_OPTIONS = [
-  "Andhra Pradesh", "Assam", "Bihar", "Delhi", "Gujarat", "Haryana",
-  "Karnataka", "Kerala", "Madhya Pradesh", "Maharashtra", "Punjab",
-  "Rajasthan", "Tamil Nadu", "Telangana", "Uttar Pradesh", "West Bengal", "Other",
-].map((s) => ({ value: s, label: s }));
-
-const STUDY_HOURS_OPTIONS = [
-  { value: "lt2", label: "< 2 hrs" },
-  { value: "2to4", label: "2 – 4 hrs" },
-  { value: "4to6", label: "4 – 6 hrs" },
-  { value: "6to8", label: "6 – 8 hrs" },
-  { value: "gt8", label: "> 8 hrs" },
-];
-
-const STRESS_OPTIONS = [
-  { value: "low", label: "Low" },
-  { value: "moderate", label: "Moderate" },
-  { value: "high", label: "High" },
-  { value: "very_high", label: "Very High" },
-];
-
-const SATISFACTION_OPTIONS = [
-  { value: "5", label: "Very Satisfied" },
-  { value: "4", label: "Satisfied" },
-  { value: "3", label: "Neutral" },
-  { value: "2", label: "Unsatisfied" },
-  { value: "1", label: "Very Unsatisfied" },
-];
-
-const ONLINE_OPTIONS = [
-  { value: "daily", label: "Daily" },
-  { value: "weekly", label: "Weekly" },
-  { value: "monthly", label: "Monthly" },
-  { value: "rarely", label: "Rarely" },
-  { value: "never", label: "Never" },
-];
 const AGE_OPTIONS = [
   { value: "18-24", label: "18–24" },
   { value: "25-30", label: "25–30" },
@@ -298,7 +239,7 @@ const SuccessScreen = ({ onReset, responseId }) => (
       Thank You!
     </h2>
     <p className="mb-6 max-w-sm text-xs sm:text-sm leading-relaxed text-slate-500">
-      Your response has been recorded succesfully. Thank you for your valuable time. Love from Team Dynamo! ❤️
+      Your response has been recorded succesfully. Thank you for your valuable time.
     </p>
     <div className="mb-6 rounded-xl border border-teal-100 bg-teal-50 px-4 sm:px-5 py-2 sm:py-3">
       <p className="text-xs text-teal-600 font-medium">Response ID</p>
@@ -817,21 +758,6 @@ const SurveyForm = () => {
 
             {step === 5 && (
               <div className="space-y-5 sm:space-y-6">
-                <InputField
-                  id="incomeImpact"
-                  label="Has COVID-19 affected your income or employment?"
-                  type="radio"
-                  required
-                  value={form.incomeImpact}
-                  onChange={setField("incomeImpact")}
-                  options={[
-                    { value: "yes", label: "Yes" },
-                    { value: "not_much", label: "Not much" },
-                    { value: "not_at_all", label: "Not at all" },
-                  ]}
-                  error={err("incomeImpact")}
-                />
-
                 <InputField
                   id="financialDifficulty"
                   label="Have you experienced financial difficulties due to COVID-19?"

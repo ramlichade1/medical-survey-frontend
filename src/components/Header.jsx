@@ -130,7 +130,7 @@ const Header = () => {
         >
           <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-teal-400" aria-hidden="true" />
           <span className="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-teal-300">
-            Covid Survey Form · 2026
+            Impact of COVID-19 pandemic- an observational survey
           </span>
         </div>
 
@@ -158,25 +158,6 @@ const Header = () => {
           aria-label="Survey statistics"
           className="animate-fade-up animate-fade-up-4 flex flex-wrap justify-center gap-2 sm:gap-3 md:gap-4 px-2"
         >
-          {[
-            { value: "3,200+", label: "Responses" },
-            { value: "42",     label: "Colleges"  },
-            { value: "100%",   label: "Anonymous" },
-          ].map(({ value, label }) => (
-            <li
-              key={label}
-              className="glass-card rounded-xl sm:rounded-2xl px-3 py-2 sm:px-4 sm:py-3 text-center flex-1 min-w-[70px] sm:min-w-[80px] max-w-[90px] sm:max-w-[100px] md:max-w-[120px]"
-              style={{ background: "rgba(255,255,255,0.1)", backdropFilter: "blur(8px)" }}
-            >
-              <p
-                className="text-sm sm:text-base md:text-lg lg:text-xl font-bold text-white"
-                style={{ fontFamily: "var(--font-display)" }}
-              >
-                {value}
-              </p>
-              <p className="mt-0.5 text-[10px] sm:text-xs font-medium text-slate-300 md:text-slate-400">{label}</p>
-            </li>
-          ))}
         </ul>
 
         {/* Mobile-only: scroll cue */}
