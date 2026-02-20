@@ -146,7 +146,6 @@ const VALIDATORS = {
 
   5: (f) => {
     const e = {};
-    if (!f.incomeImpact) e.incomeImpact = "Required.";
     if (!f.financialDifficulty) e.financialDifficulty = "Required.";
     if (!f.spendingHabit) e.spendingHabit = "Required.";
     return e;
