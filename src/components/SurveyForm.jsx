@@ -151,10 +151,20 @@ const VALIDATORS = {
     return e;
   },
 
-  6: () => ({}), // Open-ended = OPTIONAL
+  6: (f) => {
+    const e = {};
+
+    if (!f.openExperience || !f.openExperience.trim()) {
+      e.openExperience = "Please share your experience.";
+    }
+
+    if (!f.infoSource || !f.infoSource.trim()) {
+      e.infoSource = "This field is required.";
+    }
+
+    return e;
+  },
 };
-
-
 
 
 
@@ -277,31 +287,47 @@ const SurveyForm = () => {
     return Object.keys(errs).length === 0;
   };
 
+  // const focusFirstError = (errs) => {
+  //   const firstField = Object.keys(errs)[0];
+  //   if (!firstField) return;
+
+  //   // Small delay to ensure DOM updates
+  //   setTimeout(() => {
+  //     const el = document.getElementById(firstField);
+  //     if (el) {
+  //       el.scrollIntoView({
+  //         behavior: "smooth",
+  //         block: "center",
+  //       });
+  //       el.focus({ preventScroll: true });
+  //     }
+  //   }, 100);
+  // };
   const focusFirstError = (errs) => {
     const firstField = Object.keys(errs)[0];
     if (!firstField) return;
 
-    // Small delay to ensure DOM updates
     setTimeout(() => {
-      const el = document.getElementById(firstField);
+      const el = document.querySelector(
+        `[name="${firstField}"]`
+      );
+
       if (el) {
         el.scrollIntoView({
           behavior: "smooth",
           block: "center",
         });
-        el.focus({ preventScroll: true });
+
+        el.focus();
+
+        // place cursor at end (textarea UX)
+        if (el.setSelectionRange) {
+          const len = el.value?.length || 0;
+          el.setSelectionRange(len, len);
+        }
       }
-    }, 100);
+    }, 150);
   };
-
-
-  // const handleNext = () => {
-  //   if (validate(step)) {
-  //     setErrors({});
-  //     setStep((s) => Math.min(s + 1, STEPS.length));
-  //     window.scrollTo({ top: 630, behavior: "smooth" });
-  //   }
-  // };
 
   const handleNext = () => {
     const errs = VALIDATORS[step](form);
@@ -354,6 +380,7 @@ const SurveyForm = () => {
 
     if (Object.keys(errs).length > 0) {
       focusFirstError(errs);
+      isSubmittingRef.current = false; // ⭐ FIX
       return;
     }
 
@@ -796,20 +823,24 @@ const SurveyForm = () => {
                   id="openExperience"
                   label="Is there anything else you would like to share about your COVID-19 experience?"
                   type="textarea"
+                  required
                   rows={4}
                   placeholder="Your experience..."
                   value={form.openExperience}
                   onChange={setField("openExperience")}
+                  error={err("openExperience")}
                 />
 
                 <InputField
                   id="infoSource"
                   label="Which source of information do you use to stay informed about COVID-19?"
                   type="textarea"
+                  required
                   rows={3}
                   placeholder="News, Government websites, social media, etc."
                   value={form.infoSource}
                   onChange={setField("infoSource")}
+                  error={err("infoSource")}
                 />
               </div>
             )}

@@ -47,17 +47,16 @@ const TextInput = ({ id, type, placeholder, value, onChange, icon, error }) => (
     )}
     <input
       id={id}
+      name={id}
       type={type}
       placeholder={placeholder}
       value={value}
       onChange={(e) => onChange(e.target.value)}
       aria-invalid={!!error}
       aria-describedby={error ? `${id}-error` : undefined}
-      className={`${SHARED_INPUT} py-2.5 sm:py-3 md:py-4 pr-3 sm:pr-4 ${
-        icon ? "pl-9 sm:pl-10 md:pl-12" : "pl-3 sm:pl-4"
-      } ${
-        error ? "border-rose-400 focus:ring-rose-400/40 focus:border-rose-400" : ""
-      }`}
+      className={`${SHARED_INPUT} py-2.5 sm:py-3 md:py-4 pr-3 sm:pr-4 ${icon ? "pl-9 sm:pl-10 md:pl-12" : "pl-3 sm:pl-4"
+        } ${error ? "border-rose-400 focus:ring-rose-400/40 focus:border-rose-400" : ""
+        }`}
     />
   </div>
 );
@@ -66,6 +65,7 @@ const SelectInput = ({ id, placeholder, value, onChange, options, error }) => (
   <div className="relative w-full">
     <select
       id={id}
+      name={id}
       value={value}
       onChange={(e) => onChange(e.target.value)}
       aria-invalid={!!error}
@@ -94,15 +94,15 @@ const SelectInput = ({ id, placeholder, value, onChange, options, error }) => (
       </option>
 
       {options?.map(({ value: v, label }) => (
-        <option 
-          key={v} 
+        <option
+          key={v}
           value={v}
         >
           {label}
         </option>
       ))}
     </select>
-    
+
     {/* Dropdown arrow icon */}
     <div className="pointer-events-none absolute right-3 sm:right-4 top-1/2 -translate-y-1/2">
       <svg
@@ -132,11 +132,10 @@ const RadioInput = ({ id, value, onChange, options }) => (
         return (
           <label
             key={v}
-            className={`flex cursor-pointer items-center gap-2 sm:gap-2.5 rounded-lg sm:rounded-xl border px-3 sm:px-4 py-2.5 sm:py-2.5 md:py-3 text-xs sm:text-sm font-semibold transition-all duration-200 w-full xs:w-auto ${
-              isChecked
+            className={`flex cursor-pointer items-center gap-2 sm:gap-2.5 rounded-lg sm:rounded-xl border px-3 sm:px-4 py-2.5 sm:py-2.5 md:py-3 text-xs sm:text-sm font-semibold transition-all duration-200 w-full xs:w-auto ${isChecked
                 ? "border-teal-400 bg-teal-50 text-teal-700 shadow-sm"
                 : "border-slate-200 bg-white/70 text-slate-500 hover:border-slate-300 hover:bg-slate-50"
-            }`}
+              }`}
           >
             <input
               type="radio"
@@ -149,9 +148,8 @@ const RadioInput = ({ id, value, onChange, options }) => (
             {/* Custom radio dot */}
             <span
               aria-hidden="true"
-              className={`flex h-4 w-4 sm:h-4 sm:w-4 flex-shrink-0 items-center justify-center rounded-full border-2 transition-colors ${
-                isChecked ? "border-teal-500" : "border-slate-300"
-              }`}
+              className={`flex h-4 w-4 sm:h-4 sm:w-4 flex-shrink-0 items-center justify-center rounded-full border-2 transition-colors ${isChecked ? "border-teal-500" : "border-slate-300"
+                }`}
             >
               {isChecked && (
                 <span className="h-2 w-2 sm:h-2.5 sm:w-2.5 rounded-full bg-teal-500 block" />
@@ -168,15 +166,15 @@ const RadioInput = ({ id, value, onChange, options }) => (
 const TextareaInput = ({ id, placeholder, value, onChange, rows, error }) => (
   <textarea
     id={id}
+    name={id}
     placeholder={placeholder}
     value={value}
     rows={rows || 3}
     onChange={(e) => onChange(e.target.value)}
     aria-invalid={!!error}
     aria-describedby={error ? `${id}-error` : undefined}
-    className={`${SHARED_INPUT} resize-none px-3 sm:px-4 py-2.5 sm:py-3 md:py-3.5 text-sm sm:text-base ${
-      error ? "border-rose-400 focus:ring-rose-400/40 focus:border-rose-400" : ""
-    }`}
+    className={`${SHARED_INPUT} resize-none px-3 sm:px-4 py-2.5 sm:py-3 md:py-3.5 text-sm sm:text-base ${error ? "border-rose-400 focus:ring-rose-400/40 focus:border-rose-400" : ""
+      }`}
   />
 );
 
