@@ -25,7 +25,7 @@ const SurveyPage = () => {
           © 2026 Final Year Survey ·{" "}
         </p>
         <p className="mt-1 text-xs text-slate-300">
-          Conducted in SKB College for research purpose.
+          Conducted in ACP College for research purpose.
         </p>
       </footer>
     </div>
