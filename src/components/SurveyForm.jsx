@@ -34,7 +34,7 @@ const INITIAL_FORM = {
   workStudyChange: "",
   socialLifeImpact: "",
   workedFromHomeBefore: "",
-  dailyRoutineImpact: "",
+  dailyRoutineImpact: [],
   dailyRoutineOther: "",
 
   // Section 3
@@ -114,7 +114,7 @@ const VALIDATORS = {
     if (!f.workStudyChange) e.workStudyChange = "Required.";
     if (!f.socialLifeImpact) e.socialLifeImpact = "Required.";
     if (!f.workedFromHomeBefore) e.workedFromHomeBefore = "Required.";
-    if (!f.dailyRoutineImpact) e.dailyRoutineImpact = "Required.";
+    if (!f.dailyRoutineImpact.length) e.dailyRoutineImpact = "Required.";
     return e;
   },
 
@@ -397,7 +397,8 @@ const SurveyForm = () => {
         workStudyChange: form.workStudyChange,
         socialLifeImpact: form.socialLifeImpact,
         wfhBeforeCovid: form.workedFromHomeBefore,
-        dailyRoutineImpact: form.dailyRoutineImpact,
+        //dailyRoutineImpact: form.dailyRoutineImpact,
+        dailyRoutineImpact: form.dailyRoutineImpact.join(", "),
 
         vaccinated: form.vaccinated,
         maskPractice: form.preventivePractice,
@@ -604,16 +605,15 @@ const SurveyForm = () => {
                 <InputField
                   id="dailyRoutineImpact"
                   label="How has COVID-19 affected your daily routine?"
-                  type="select"
+                  type="checkbox-group"
                   required
-                  placeholder="Select an option"
                   value={form.dailyRoutineImpact}
                   onChange={setField("dailyRoutineImpact")}
                   options={ROUTINE_IMPACT}
                   error={err("dailyRoutineImpact")}
                 />
 
-                {form.dailyRoutineImpact === "other" && (
+                {form.dailyRoutineImpact.includes("other") && (
                   <InputField
                     id="dailyRoutineOther"
                     label="Please specify"

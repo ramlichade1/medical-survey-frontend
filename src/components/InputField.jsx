@@ -133,8 +133,8 @@ const RadioInput = ({ id, value, onChange, options }) => (
           <label
             key={v}
             className={`flex cursor-pointer items-center gap-2 sm:gap-2.5 rounded-lg sm:rounded-xl border px-3 sm:px-4 py-2.5 sm:py-2.5 md:py-3 text-xs sm:text-sm font-semibold transition-all duration-200 w-full xs:w-auto ${isChecked
-                ? "border-teal-400 bg-teal-50 text-teal-700 shadow-sm"
-                : "border-slate-200 bg-white/70 text-slate-500 hover:border-slate-300 hover:bg-slate-50"
+              ? "border-teal-400 bg-teal-50 text-teal-700 shadow-sm"
+              : "border-slate-200 bg-white/70 text-slate-500 hover:border-slate-300 hover:bg-slate-50"
               }`}
           >
             <input
@@ -227,6 +227,15 @@ const InputField = ({
             error={error}
           />
         );
+      case "checkbox-group":
+        return (
+          <CheckboxGroup
+            id={id}
+            value={value}
+            onChange={onChange}
+            options={options}
+          />
+        );
       default:
         return (
           <TextInput
@@ -301,6 +310,53 @@ const InputField = ({
         </p>
       )}
     </div>
+  );
+};
+
+const CheckboxGroup = ({ id, value = [], onChange, options }) => {
+
+  const toggleValue = (val) => {
+    let updated;
+
+    if (value.includes(val)) {
+      updated = value.filter(v => v !== val);
+    } else {
+      updated = [...value, val];
+    }
+
+    onChange(updated);
+  };
+
+  return (
+    <fieldset id={id}>
+      <div className="flex flex-col gap-2">
+        {options?.map(({ value: v, label }) => {
+          const checked = value.includes(v);
+
+          return (
+            <label
+              key={v}
+              className={`flex items-center gap-3 cursor-pointer rounded-xl border px-4 py-3 transition-all
+              ${checked
+                  ? "border-teal-400 bg-teal-50"
+                  : "border-slate-200 hover:bg-slate-50"
+                }`}
+            >
+              <input
+                type="checkbox"
+                checked={checked}
+                onChange={() => toggleValue(v)}
+                className="h-4 w-4 accent-teal-500"
+              />
+
+              <span className="text-sm font-medium text-slate-700">
+                {label}
+              </span>
+            </label>
+          );
+        })}
+      </div>
+    </fieldset>
   );
 };
 
