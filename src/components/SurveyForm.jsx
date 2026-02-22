@@ -18,7 +18,8 @@ const STEPS = [
   { id: 3, title: "Vaccination & Prevention", subtitle: "Health & safety measures" },
   { id: 4, title: "Mental Health & Well-being", subtitle: "Psychological impact" },
   { id: 5, title: "Economic Impact", subtitle: "Income & financial stability" },
-  { id: 6, title: "Open Ended Feedback", subtitle: "Your personal experience" },
+  { id: 6, title: "Planning for Future Pandemics", subtitle: "Readiness & awareness" },
+  { id: 7, title: "Open Ended Feedback", subtitle: "Your personal experience" },
 ];
 
 
@@ -60,9 +61,17 @@ const INITIAL_FORM = {
   financialDifficulty: "",
   spendingHabit: "",
 
-  // Section 6
+  // Section 6 – Future Planning
+  futurePrepared: "",
+  emergencySupplies: "",
+  futureVaccination: "",
+  governmentFocus: "",
+  schoolPreparedness: "",
+
+  // Section 7
   openExperience: "",
   infoSource: "",
+  suggestedMeasures: "",
 };
 
 
@@ -162,16 +171,37 @@ const VALIDATORS = {
   6: (f) => {
     const e = {};
 
-    if (!f.openExperience || !f.openExperience.trim()) {
-      e.openExperience = "Please share your experience.";
-    }
-
-    if (!f.infoSource || !f.infoSource.trim()) {
-      e.infoSource = "This field is required.";
-    }
+    if (!f.futurePrepared) e.futurePrepared = "Required.";
+    if (!f.emergencySupplies) e.emergencySupplies = "Required.";
+    if (!f.futureVaccination) e.futureVaccination = "Required.";
+    if (!f.governmentFocus) e.governmentFocus = "Required.";
+    if (!f.schoolPreparedness) e.schoolPreparedness = "Required.";
 
     return e;
   },
+
+  // 7: (f) => {
+  //   const e = {};
+
+  //   if (!f.openExperience || !f.openExperience.trim()) {
+  //     e.openExperience = "Please share your experience.";
+  //   }
+
+  //   if (!f.infoSource || !f.infoSource.trim()) {
+  //     e.infoSource = "This field is required.";
+  //   }
+
+  //   // NEW REQUIRED FIELD
+  //   if (!f.suggestedMeasures || !f.suggestedMeasures.trim()) {
+  //     e.suggestedMeasures = "This field is required.";
+  //   }
+
+  //   return e;
+  // },
+
+  7: () => {
+  return {};
+},
 };
 
 
@@ -427,11 +457,18 @@ const SurveyForm = () => {
 
         experienceShare: form.openExperience,
         infoSource: form.infoSource,
+        suggestedMeasures: form.suggestedMeasures,
 
         // NEW DATA
         healthcareAccessible: form.healthcareAccessible,
         facedShortage: form.facedShortage,
         healthcareSatisfaction: form.healthcareSatisfaction,
+
+        futurePrepared: form.futurePrepared,
+        emergencySupplies: form.emergencySupplies,
+        futureVaccination: form.futureVaccination,
+        governmentFocus: form.governmentFocus,
+        schoolPreparedness: form.schoolPreparedness,
       };
 
 
@@ -867,29 +904,116 @@ const SurveyForm = () => {
             )}
 
             {step === 6 && (
+              <div className="space-y-5 sm:space-y-6">
+
+                <InputField
+                  id="futurePrepared"
+                  label="Do you feel better prepared for a future pandemic?"
+                  type="radio"
+                  required
+                  value={form.futurePrepared}
+                  onChange={setField("futurePrepared")}
+                  options={[
+                    { value: "yes", label: "Yes" },
+                    { value: "no", label: "No" },
+                    { value: "not_sure", label: "Not sure" },
+                  ]}
+                  error={err("futurePrepared")}
+                />
+
+                <InputField
+                  id="emergencySupplies"
+                  label="Do you maintain emergency health supplies at home?"
+                  type="radio"
+                  required
+                  value={form.emergencySupplies}
+                  onChange={setField("emergencySupplies")}
+                  options={YES_NO}
+                  error={err("emergencySupplies")}
+                />
+
+                <InputField
+                  id="futureVaccination"
+                  label="Would you accept vaccination quickly in a future pandemic?"
+                  type="radio"
+                  required
+                  value={form.futureVaccination}
+                  onChange={setField("futureVaccination")}
+                  options={[
+                    { value: "yes", label: "Yes" },
+                    { value: "no", label: "No" },
+                    { value: "depends", label: "Depends on disease severity" },
+                  ]}
+                  error={err("futureVaccination")}
+                />
+
+                <InputField
+                  id="governmentFocus"
+                  label="What should government improve for future pandemics?"
+                  type="radio"
+                  required
+                  value={form.governmentFocus}
+                  onChange={setField("governmentFocus")}
+                  options={[
+                    { value: "healthcare", label: "Improve healthcare infrastructure" },
+                    { value: "digital_education", label: "Improve digital education systems" },
+                    { value: "economic_support", label: "Provide economic support plans" },
+                    { value: "awareness", label: "Improve public awareness programs" },
+                    { value: "all", label: "All of the above" },
+                  ]}
+                  error={err("governmentFocus")}
+                />
+
+                <InputField
+                  id="schoolPreparedness"
+                  label="Should pandemic preparedness be included in school education?"
+                  type="radio"
+                  required
+                  value={form.schoolPreparedness}
+                  onChange={setField("schoolPreparedness")}
+                  options={YES_NO}
+                  error={err("schoolPreparedness")}
+                />
+
+              </div>
+            )}
+
+            {step === 7 && (
               <div className="space-y-4 sm:space-y-5">
                 <InputField
                   id="openExperience"
                   label="Is there anything else you would like to share about your COVID-19 experience?"
                   type="textarea"
-                  required
+                  //required
                   rows={4}
                   placeholder="Your experience..."
                   value={form.openExperience}
                   onChange={setField("openExperience")}
-                  error={err("openExperience")}
+                  //error={err("openExperience")}
                 />
 
                 <InputField
                   id="infoSource"
                   label="Which source of information do you use to stay informed about COVID-19?"
                   type="textarea"
-                  required
+                  //required
                   rows={3}
                   placeholder="News, Government websites, social media, etc."
                   value={form.infoSource}
                   onChange={setField("infoSource")}
-                  error={err("infoSource")}
+                  //error={err("infoSource")}
+                />
+
+                <InputField
+                  id="suggestedMeasures"
+                  label="What measures do you suggest to improve future pandemic preparedness?"
+                  type="textarea"
+                  //required
+                  rows={4}
+                  placeholder="Your suggestions..."
+                  value={form.suggestedMeasures}
+                  onChange={setField("suggestedMeasures")}
+                  //error={err("suggestedMeasures")}
                 />
               </div>
             )}
