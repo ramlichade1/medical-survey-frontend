@@ -50,6 +50,10 @@ const INITIAL_FORM = {
   mentalHealthImpact: "",
   anxietyLevel: "",
   soughtHelp: "",
+  // NEW FIELDS
+  healthcareAccessible: "",
+  facedShortage: "",
+  healthcareSatisfaction: "",
 
   // Section 5
   incomeImpact: "",
@@ -141,6 +145,10 @@ const VALIDATORS = {
     if (!f.mentalHealthImpact) e.mentalHealthImpact = "Required.";
     if (!f.anxietyLevel) e.anxietyLevel = "Required.";
     if (!f.soughtHelp) e.soughtHelp = "Required.";
+    // NEW VALIDATIONS
+    if (!f.healthcareAccessible) e.healthcareAccessible = "Required.";
+    if (!f.facedShortage) e.facedShortage = "Required.";
+    if (!f.healthcareSatisfaction) e.healthcareSatisfaction = "Required.";
     return e;
   },
 
@@ -419,6 +427,11 @@ const SurveyForm = () => {
 
         experienceShare: form.openExperience,
         infoSource: form.infoSource,
+
+        // NEW DATA
+        healthcareAccessible: form.healthcareAccessible,
+        facedShortage: form.facedShortage,
+        healthcareSatisfaction: form.healthcareSatisfaction,
       };
 
 
@@ -778,6 +791,42 @@ const SurveyForm = () => {
                   onChange={setField("soughtHelp")}
                   options={YES_NO}
                   error={err("soughtHelp")}
+                />
+
+                <InputField
+                  id="healthcareAccessible"
+                  label="Was healthcare easily accessible during the pandemic?"
+                  type="radio"
+                  required
+                  value={form.healthcareAccessible}
+                  onChange={setField("healthcareAccessible")}
+                  options={YES_NO}
+                  error={err("healthcareAccessible")}
+                />
+                <InputField
+                  id="facedShortage"
+                  label="Did you face shortage of hospital beds, oxygen, or medicines?"
+                  type="radio"
+                  required
+                  value={form.facedShortage}
+                  onChange={setField("facedShortage")}
+                  options={YES_NO}
+                  error={err("facedShortage")}
+                />
+                <InputField
+                  id="healthcareSatisfaction"
+                  label="Rate your satisfaction with healthcare services:"
+                  type="radio"
+                  required
+                  value={form.healthcareSatisfaction}
+                  onChange={setField("healthcareSatisfaction")}
+                  options={[
+                    { value: "very_satisfied", label: "Very satisfied" },
+                    { value: "satisfied", label: "Satisfied" },
+                    { value: "neutral", label: "Neutral" },
+                    { value: "dissatisfied", label: "Dissatisfied" },
+                  ]}
+                  error={err("healthcareSatisfaction")}
                 />
               </div>
             )}
